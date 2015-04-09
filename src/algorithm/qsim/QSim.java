@@ -2,6 +2,10 @@ package algorithm.qsim;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import models.qsim.DataRegister;
 import models.qsim.ElementsGroup;
@@ -29,12 +33,13 @@ public class QSim implements Runnable {
 	private String configFile;
 	private String dataFile;
 	private String groupsFile;
+	private Similarity similarity;
 
 	/**
 	 * Constructor of QSim class
 	 *
 	 * @param q
-	 * q value
+	 *            q value
 	 */
 	public QSim(float q) {
 		super();
@@ -47,29 +52,36 @@ public class QSim implements Runnable {
 	 * Constructor of QSim class
 	 *
 	 * @param q
-	 * q value
+	 *            q value
+	 * @param similarity
+	 *            : object that defines the similarity measures to be used by
+	 *            the algorithm
 	 * @param configFile
-	 * 			  : full path and name for the XML configuration file
+	 *            : full path and name for the XML configuration file
 	 * @param dataFile
-	 * 			  : full path and name for the text file containing the comma-separated data to be clustered
+	 *            : full path and name for the text file containing the
+	 *            comma-separated data to be clustered
 	 * @param configFile
-	 * 			  : full path and name to save the text file containing the final classification of the algorithm
+	 *            : full path and name to save the text file containing the
+	 *            final classification of the algorithm
 	 */
-	public QSim(float q, String configFile, String dataFile, String groupsFile) {
+	public QSim(float q, Similarity similarity, String configFile,
+			String dataFile, String groupsFile) {
 		super();
+		this.similarity = similarity;
 		this.q = (short) (q * 1000);
 		groups = new ArrayList<ElementsGroup>();
 		setData(configFile, dataFile);
 		this.setGroupsFile(groupsFile);
 	}
-	
+
 	/**
 	 * Constructor simple of QSim class
 	 *
 	 * @param data
-	 * data matrix
+	 *            data matrix
 	 * @param q
-	 * q value
+	 *            q value
 	 */
 	public QSim(List<DataRegister> data, float q) {
 		super();
@@ -82,7 +94,7 @@ public class QSim implements Runnable {
 	 * Density Calculus Function
 	 *
 	 * @param moi
-	 * matrix with the maximum object intersection
+	 *            matrix with the 
 	 * @return densityArray: array with density value for each object
 	 */
 	public void densityDataArray(List<ElementsGroup> moi) {
@@ -115,9 +127,9 @@ public class QSim implements Runnable {
 	 * Density Calculus Function
 	 *
 	 * @param moi
-	 * matrix with the maximum object intersection
+	 *            matrix with the maximum object intersection
 	 * @param densityArray
-	 * array with density value to be updated
+	 *            array with density value to be updated
 	 * @return densityArray: array with density value for each object
 	 */
 	public void densityDataArray(List<ElementsGroup> moi, float[] densityArray) {
@@ -157,36 +169,48 @@ public class QSim implements Runnable {
 	 * Execute all algorithm after object instance
 	 */
 	public void execute() {
-		long time = System.currentTimeMillis();
-		System.out.println("Iniciou...");
-		long time2 = System.currentTimeMillis();
-		System.out.println("Calculando a similaridade...");
-		similarityMatrix = Similarity.euclideanDistance(data);
-		System.out.println("Tempo Calculo Similaridade: "
-				+ (System.currentTimeMillis() - time2) / 1000.0 + " segundos");
-		time2 = System.currentTimeMillis();
-		System.out.println("Calculando o rs...");
-		List<ElementsGroup> rs = this.relatedSets();
-		System.out.println("Tempo Calculo RS: "
-				+ (System.currentTimeMillis() - time2) / 1000.0 + " segundos");
-		time2 = System.currentTimeMillis();
-		System.out.println("Calculando o moi...");
-		List<ElementsGroup> moi = this.maximumObjectIntersection(rs);
-		System.out.println("Tempo Calculo RRS: "
-				+ (System.currentTimeMillis() - time2) / 1000.0 + " segundos");
-		time2 = System.currentTimeMillis();
-		System.out.println("Calculando a densidade...");
-		this.densityDataArray(moi);
-		System.out.println("Tempo Calculo Densidade: "
-				+ (System.currentTimeMillis() - time2) / 1000.0 + " segundos");
-		time2 = System.currentTimeMillis();
-		System.out.println("Gerando os grupos...");
-		this.generateGroups(moi);
-		System.out.println("Tempo Calculo Groups: "
-				+ (System.currentTimeMillis() - time2) / 1000.0 + " segundos");
-		System.out.println("Terminou...\n.\n.\n.\n.\n.");
-		System.out.println("Tempo de execucao: "
-				+ (System.currentTimeMillis() - time) / 1000.0 + " segundos");
+		try {
+			long time = System.currentTimeMillis();
+			System.out.println("Iniciou...");
+			long time2 = System.currentTimeMillis();
+			System.out.println("Calculando a similaridade...");
+			similarityMatrix = similarity.euclideanDistance(data);
+			System.out.println("Tempo Calculo Similaridade: "
+					+ (System.currentTimeMillis() - time2) / 1000.0
+					+ " segundos");
+			time2 = System.currentTimeMillis();
+			System.out.println("Calculando o rs...");
+			List<ElementsGroup> rs = this.relatedSets();
+			System.out.println("Tempo Calculo RS: "
+					+ (System.currentTimeMillis() - time2) / 1000.0
+					+ " segundos");
+			time2 = System.currentTimeMillis();
+			System.out.println("Calculando o moi...");
+			List<ElementsGroup> moi;
+			moi = this.maximumObjectIntersection(rs);
+			System.out.println("Tempo Calculo RRS: "
+					+ (System.currentTimeMillis() - time2) / 1000.0
+					+ " segundos");
+			time2 = System.currentTimeMillis();
+			System.out.println("Calculando a densidade...");
+			this.densityDataArray(moi);
+			System.out.println("Tempo Calculo Densidade: "
+					+ (System.currentTimeMillis() - time2) / 1000.0
+					+ " segundos");
+			time2 = System.currentTimeMillis();
+			System.out.println("Gerando os grupos...");
+			this.generateGroups(moi);
+			System.out.println("Tempo Calculo Groups: "
+					+ (System.currentTimeMillis() - time2) / 1000.0
+					+ " segundos");
+			System.out.println("Terminou...\n.\n.\n.\n.\n.");
+			System.out.println("Tempo de execucao: "
+					+ (System.currentTimeMillis() - time) / 1000.0
+					+ " segundos");
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -195,7 +219,7 @@ public class QSim implements Runnable {
 	 * this groups on label attribute.
 	 *
 	 * @param moi
-	 * matrix with the maximum object intersection
+	 *            matrix with the maximum object intersection
 	 */
 	public void generateGroups(List<ElementsGroup> moi) {
 
@@ -281,7 +305,7 @@ public class QSim implements Runnable {
 	 * This function will try to allocate new elements into existing groups
 	 *
 	 * @param list
-	 * list of elements to be inserted
+	 *            list of elements to be inserted
 	 * @return list of remaining elements
 	 */
 	public List<Short> insertNewElements(List<Short> list) {
@@ -350,9 +374,9 @@ public class QSim implements Runnable {
 	 * This function tries to join one group with another one.
 	 *
 	 * @param group1
-	 * first group to be joined
+	 *            first group to be joined
 	 * @param group2
-	 * second group to be joined
+	 *            second group to be joined
 	 * @return if the groups were joined or not.
 	 */
 	public boolean joinGroups(int group1, int group2) {
@@ -377,84 +401,58 @@ public class QSim implements Runnable {
 	}
 
 	/**
-	 *
-	 * Calculus of the maximum object intersection for each object.
+	 * Generates the maximum object intersection for each related set in a
+	 * separated thread.
 	 *
 	 * @param relatedSets
-	 * Related sets matrix
+	 *            Related sets matrix
 	 * @return moi Updated with the maximum object intersection
 	 */
 	public List<ElementsGroup> maximumObjectIntersection(
-			List<ElementsGroup> relatedSets) {
+			List<ElementsGroup> relatedSets) throws InterruptedException,
+			ExecutionException {
 
 		// Initialize moi matrix
 		List<ElementsGroup> moi = new ArrayList<ElementsGroup>();
 
-		// Roam through all objects of related set
 		for (int i = 0; i < relatedSets.size(); i++) {
-
-			// Recovery index from all related objects
-			List<Short> aArray = relatedSets.get(i).getElements();
-
-			// Checks if the list aArray is empty
-			if (!aArray.isEmpty()) {
-
-				// Recovery index from all related objects of the first object
-				// in aArray
-				List<Short> bArray = relatedSets.get(aArray.get(0))
-						.getElements();
-
-				// Time safe object to insert into reduced
-				short c = aArray.get(0);
-
-				// Initialize reduced array that contains moi of this object
-				List<Short> reduced = new ArrayList<Short>();
-
-				boolean finish = true;
-				while (finish) {
-					// Store the intersection between aArray and bArray
-					List<Short> auxArray = Misc.intersection(aArray, bArray);
-					// Roam the rest of aArray elements to find the greatest
-					// intersection between objects
-					for (int j = 1; j < aArray.size(); j++) {
-						bArray = relatedSets.get(aArray.get(j)).getElements();
-						if (auxArray.size() < Misc.intersection(aArray, bArray)
-								.size()) {
-							// Save a great intersection
-							auxArray = Misc.intersection(aArray, bArray);
-							// Time safe object to insert into reduced
-							c = aArray.get(j);
-						}
-					}
-
-					// Add c object into reduced array and prepare to the next
-					// interaction
-					if (!auxArray.isEmpty()) {
-						if (!reduced.contains(c))
-							reduced.add(c);
-						aArray = auxArray;
-						bArray = relatedSets.get(aArray.get(0)).getElements();
-						c = aArray.get(0);
-					} else {
-						reduced.add(aArray.get(0));
-						finish = false;
-					}
-				}
-
-				// Update moi matrix with reduced array from i object
-				ElementsGroup temp = new ElementsGroup();
-				temp.setElements(reduced);
-				moi.add(temp);
-				temp = null;
-			} else {
-				ElementsGroup temp = new ElementsGroup();
-				temp.setElements(aArray);
-				moi.add(temp);
-				temp = null;
-			}
+			moi.add(new MOIGenerator(relatedSets, i).generateMOI());
 		}
 
-		// Returns moi matrix
+		return moi;
+	}
+
+	/**
+	 *
+	 * Generates the maximum object intersection for each related set in a
+	 * separated thread.
+	 *
+	 * @author Douglas De Rizzo Meneghetti
+	 * 
+	 * @param relatedSets
+	 *            Related sets matrix
+	 * @return moi Updated with the maximum object intersection
+	 */
+	public List<ElementsGroup> parallelMaximumObjectIntersection(
+			List<ElementsGroup> relatedSets) throws InterruptedException,
+			ExecutionException {
+
+		// Initialize moi matrix
+		List<ElementsGroup> moi = new ArrayList<ElementsGroup>();
+		ArrayList<MOIGenerator> tasks = new ArrayList<MOIGenerator>();
+		ExecutorService executor = Executors.newCachedThreadPool();
+
+		for (int i = 0; i < relatedSets.size(); i++) {
+			tasks.add(new MOIGenerator(relatedSets, i));
+		}
+		
+		List<Future<ElementsGroup>> results = executor.invokeAll(tasks);
+		for (Future<ElementsGroup> result : results) {
+			moi.add(result.get());
+		}
+
+		executor.shutdown();
+
 		return moi;
 	}
 
@@ -473,10 +471,10 @@ public class QSim implements Runnable {
 			// Calculates all existing groups centroid
 			List<DataRegister> lp = new ArrayList<DataRegister>();
 			for (ElementsGroup g : groups)
-				lp.add(Similarity.centroid(g.getElements(), data));
+				lp.add(similarity.centroid(g.getElements(), data));
 
 			// Calculates the similarity between them
-			short[][] simTemp = Similarity.euclideanDistance(lp);
+			short[][] simTemp = similarity.euclideanDistance(lp);
 
 			// Supporting variables
 			boolean include = false;
@@ -529,12 +527,12 @@ public class QSim implements Runnable {
 				// Calculates all existing groups centroid
 				List<DataRegister> lp = new ArrayList<DataRegister>();
 				for (ElementsGroup g : groups)
-					lp.add(Similarity.centroid(g.getElements(), data));
+					lp.add(similarity.centroid(g.getElements(), data));
 				// Add the element in comparison
 				lp.add(data.get(element));
 
 				// Calculates the similarity between them
-				short[][] sim = Similarity.euclideanDistance(lp);
+				short[][] sim = similarity.euclideanDistance(lp);
 
 				// Copy the group number to the choose one temporary
 				short choose = i;
@@ -542,7 +540,7 @@ public class QSim implements Runnable {
 				// Search for the biggest similarity group
 				for (short j = 0; j < lp.size() - 1; j++)
 					if (i != j
-					&& sim[lp.size() - 1][j] > sim[lp.size() - 1][choose])
+							&& sim[lp.size() - 1][j] > sim[lp.size() - 1][choose])
 						choose = j;
 
 				// If the biggest similarity groups is not actual one, the
@@ -550,9 +548,9 @@ public class QSim implements Runnable {
 				if (i != choose) {
 					groups.get(choose).getElements().add(element);
 					groups.get(i)
-					.getElements()
-					.remove(groups.get(i).getElements()
-							.indexOf(element));
+							.getElements()
+							.remove(groups.get(i).getElements()
+									.indexOf(element));
 				}
 			}
 		}
@@ -587,17 +585,17 @@ public class QSim implements Runnable {
 	 * This function creates independent groups
 	 *
 	 * @param aux
-	 * This is a new group to be included in labels
+	 *            This is a new group to be included in labels
 	 */
 	public void resolveIntersection(List<Short> aux) {
 		// Checks if exists some group
 		if (!groups.isEmpty()) {
 			// Calculates centroid of aux
-			DataRegister centroidAux = Similarity.centroid(aux, data);
+			DataRegister centroidAux = similarity.centroid(aux, data);
 			// Roam through all groups created
 			for (ElementsGroup g : groups) {
 				// Calculates centroid from group g
-				DataRegister centroidG = Similarity.centroid(g.getElements(),
+				DataRegister centroidG = similarity.centroid(g.getElements(),
 						data);
 				// list is an aux array keep just the intersection between g and
 				// aux
@@ -615,7 +613,7 @@ public class QSim implements Runnable {
 						lp.add(data.get(e));
 
 						// Calculates the similarity between them
-						short[][] sim = Similarity.euclideanDistance(lp);
+						short[][] sim = similarity.euclideanDistance(lp);
 
 						// Removes the element from least similar centroid
 						if (sim[0][2] <= sim[1][2])
@@ -636,11 +634,9 @@ public class QSim implements Runnable {
 	@Override
 	public void run() {
 		execute();
-		//saveGroupsFile(groupsFile);
+		// saveGroupsFile(groupsFile);
 		saveOutputGroups(groupsFile);
 	}
-	
-
 
 	/**
 	 * Save group index in a txt file.
@@ -660,7 +656,7 @@ public class QSim implements Runnable {
 	}
 
 	private void saveOutputGroups(String path) {
-		Misc.writeOutputGroups(groups, path);		
+		Misc.writeOutputGroups(groups, path);
 	}
 
 	/**
