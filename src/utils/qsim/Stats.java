@@ -77,4 +77,33 @@ public class Stats {
 			return 0;
 	}
 
+	/**
+	 *
+	 * This function normalizes data between 0 and 1 for a better algorithm
+	 * performance
+	 *
+	 * @param data
+	 *            : Double matrix to normalize data between 0 and 1
+	 * @return data: Data normalized
+	 */
+	public static short[][] dataNormalization(float[][] data) {
+	
+		short[][] newData = new short[data.length][data.length];
+		// Save min value of data
+		float minValue = Misc.min(data);
+		// Save max value of data
+		float maxValue = Misc.max(data);
+	
+		// Roam through data normalizing its information
+		for (int i = 0; i < data.length; i++)
+			for (int j = i; j < data.length; j++) {
+				newData[i][j] = (short) ((1 - (data[i][j] - minValue)
+						/ (maxValue - minValue)) * 1000);
+				newData[j][i] = newData[i][j];
+			}
+	
+		// Returns data normalized
+		return newData;
+	}
+
 }
