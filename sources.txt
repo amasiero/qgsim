@@ -1,0 +1,12 @@
+./src/file/qsim/XMLFunctions.java
+./src/file/qsim/TxtFunctions.java
+./src/algorithm/qsim/QSim.java
+./src/models/qsim/Attribute.java
+./src/models/qsim/DataRegister.java
+./src/models/qsim/ElementsGroup.java
+./src/models/qsim/Item.java
+./src/models/qsim/AttributeType.java
+./src/similarity/qsim/Similarity.java
+./src/utils/qsim/Stats.java
+./src/utils/qsim/Similarity.java
+./src/utils/qsim/Misc.java
