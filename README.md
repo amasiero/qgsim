@@ -1,4 +1,4 @@
-[https://api.travis-ci.org/douglasrizzo/qsim.svg](https://travis-ci.org/douglasrizzo/qsim)
+[![Build Status](https://travis-ci.org/douglasrizzo/qsim.svg?branch=master)](https://travis-ci.org/douglasrizzo/qsim)
 
 ### Welcome to QSIM Clustering Algorithm page.
 This is a clustering algorithm based on similarity values. The main feature of QSIM is that it keeps a quality between cluster's elements with a minimal similarity value. 
