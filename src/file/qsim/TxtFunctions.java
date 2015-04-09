@@ -29,18 +29,14 @@ public class TxtFunctions {
 
 			while ((line = br.readLine()) != null) {
 				List<Float> register = new ArrayList<Float>();
-				for (int i = 0; i < line.split(",").length; i++) {
-					if ((attributes.get(i).getType() == AttributeType.DECIMAL)
-							|| (attributes.get(i).getType() == AttributeType.NUMBER)) {
+				for (int i = 0; i < line.split(",").length; i++)
+					if (attributes.get(i).getType() == AttributeType.DECIMAL
+					|| attributes.get(i).getType() == AttributeType.NUMBER)
 						register.add(Float.parseFloat(line.split(",")[i]));
-					} else {
-						for (Item item : attributes.get(i).getItens()) {
-							if (item.getNameItem().equals(line.split(",")[i])) {
+					else
+						for (Item item : attributes.get(i).getItens())
+							if (item.getNameItem().equals(line.split(",")[i]))
 								register.add((float) item.getCodeItem());
-							}
-						}
-					}
-				}
 				DataRegister dr = new DataRegister();
 				dr.setRegister(register);
 				data.add(dr);

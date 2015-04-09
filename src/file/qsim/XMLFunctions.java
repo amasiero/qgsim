@@ -1,17 +1,20 @@
 package file.qsim;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import models.qsim.Attribute;
 import models.qsim.AttributeType;
 import models.qsim.Item;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class XMLFunctions {
 
@@ -39,18 +42,18 @@ public class XMLFunctions {
 
 					temp.setNameAttribute(eElement.getElementsByTagName("name")
 							.item(0).getTextContent());
-					
+
 					switch (eElement.getElementsByTagName("type").item(0)
 							.getTextContent().toLowerCase()) {
-					case "number":
-						temp.setType(AttributeType.NUMBER);
-						break;
-					case "decimal":
-						temp.setType(AttributeType.DECIMAL);
-						break;
-					case "class":
-						temp.setType(AttributeType.CLASS);
-						break;
+							case "number":
+								temp.setType(AttributeType.NUMBER);
+								break;
+							case "decimal":
+								temp.setType(AttributeType.DECIMAL);
+								break;
+							case "class":
+								temp.setType(AttributeType.CLASS);
+								break;
 					}
 
 					if (eElement.getElementsByTagName("type").item(0)
@@ -72,7 +75,7 @@ public class XMLFunctions {
 										.parseInt(eElementItem
 												.getElementsByTagName(
 														"codValue").item(0)
-												.getTextContent()));
+														.getTextContent()));
 
 							}
 

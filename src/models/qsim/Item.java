@@ -6,25 +6,17 @@ public class Item {
 	protected int codeItem;
 
 	/**
-	 * @return the nameItem
-	 */
-	public String getNameItem() {
-		return nameItem;
-	}
-
-	/**
-	 * @param nameItem
-	 *            the nameItem to set
-	 */
-	public void setNameItem(String nameItem) {
-		this.nameItem = nameItem;
-	}
-
-	/**
 	 * @return the codeItem
 	 */
 	public int getCodeItem() {
 		return codeItem;
+	}
+
+	/**
+	 * @return the nameItem
+	 */
+	public String getNameItem() {
+		return nameItem;
 	}
 
 	/**
@@ -33,6 +25,14 @@ public class Item {
 	 */
 	public void setCodeItem(int codeItem) {
 		this.codeItem = codeItem;
+	}
+
+	/**
+	 * @param nameItem
+	 *            the nameItem to set
+	 */
+	public void setNameItem(String nameItem) {
+		this.nameItem = nameItem;
 	}
 
 }
