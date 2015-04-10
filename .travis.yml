@@ -6,4 +6,5 @@ jdk:
   - openjdk7
 
 script:
+  - find -name *.java > sources.txt
   - javac @sources.txt
