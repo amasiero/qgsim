@@ -4,7 +4,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import models.qsim.ElementsGroup;
 
@@ -64,29 +66,30 @@ public class Misc {
 	/**
 	 * Check intersection between two lists
 	 *
-	 * @param list1
+	 * @param aArray
 	 *            : first list
-	 * @param list2
+	 * @param bArray
 	 *            : second list
 	 * @return list: intersection list
 	 */
-	public static List<Short> intersection(List<Short> list1, List<Short> list2) {
+	public static List<Short> intersection(List<Short> aArray,
+			List<Short> bArray) {
 
 		// Initialize list
 		List<Short> list = new ArrayList<Short>();
 
 		// Roam through list1 checking if there is the element into list2
 
-		int i = 0, j = 0;
+		short i = 0, j = 0;
 
-		while (i < list1.size() && j < list2.size())
-			if (list1.get(i).equals(list2.get(j))) {
-				list.add(list1.get(i));
+		while (i < aArray.size() && j < bArray.size())
+			if (aArray.get(i).equals(bArray.get(j))) {
+				list.add(aArray.get(i));
 				i++;
 				j++;
-			} else if (list1.get(i) <= list2.get(j))
+			} else if (aArray.get(i) <= bArray.get(j))
 				i++;
-			else if (list1.get(i) > list2.get(j))
+			else if (aArray.get(i) > bArray.get(j))
 				j++;
 
 		// Returns list
@@ -115,6 +118,29 @@ public class Misc {
 
 		// Returns list
 		return list;
+	}
+
+	/**
+	 * Check intersection between two lists
+	 *
+	 * @param list1
+	 *            : first list
+	 * @param list2
+	 *            : second list
+	 * @return list: intersection list
+	 */
+	public static List<Short> intersection3(List<Short> list1, List<Short> list2) {
+
+		// Initialize list
+		Set<Short> s1 = new HashSet<Short>(list1), s2 = new HashSet<Short>(
+				list2);
+		Set<Short> list = s1.size() <= s2.size() ? s1 : s2;
+
+		// Roam through list1 checking if there is the element into list2
+
+		list.retainAll(s2);
+		
+		return new ArrayList<Short>(list);
 	}
 
 	/**
