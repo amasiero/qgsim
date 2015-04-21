@@ -4,30 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import utils.qsim.Misc;
 import models.qsim.ElementsGroup;
+import utils.qsim.Misc;
 
 /**
  * Generates maximum object intersections for Q-SIM related sets. This class
- * implements the {@linkplain java.util.concurrent.Callable} interface, which means it can be
- * executed in parallel in case there is the need to calculate intersections for
- * a large group of related sets
+ * implements the {@linkplain java.util.concurrent.Callable} interface, which
+ * means it can be executed in parallel in case there is the need to calculate
+ * intersections for a large group of related sets
  * 
  * @author Douglas De Rizzo meneghetti
  */
 public class MOIGenerator implements Callable<ElementsGroup> {
 
 	private List<ElementsGroup> relatedSets;
-	private int i;
+	private short index;
 
-	public MOIGenerator(List<ElementsGroup> relatedSets, int i) {
+	public short getIndex() {
+		return index;
+	}
+
+	public MOIGenerator(List<ElementsGroup> relatedSets, short index) {
 		this.relatedSets = relatedSets;
-		this.i = i;
+		this.index = index;
 	}
 
 	public ElementsGroup generateMOI() {
+		System.out.println("Generating MOI for related set " + index);
 		// Recovery index from all related objects
-		List<Short> aArray = relatedSets.get(i).getElements();
+		List<Short> aArray = relatedSets.get(index).getElements();
 
 		// Checks if the list aArray is empty
 		if (!aArray.isEmpty()) {
@@ -36,7 +41,9 @@ public class MOIGenerator implements Callable<ElementsGroup> {
 			// object
 			// in aArray
 			List<Short> bArray = relatedSets.get(aArray.get(0)).getElements();
-
+			
+			List<Short> cArray;
+			
 			// Time safe object to insert into reduced
 			short c = aArray.get(0);
 
@@ -53,10 +60,10 @@ public class MOIGenerator implements Callable<ElementsGroup> {
 				// intersection between objects
 				for (int j = 1; j < aArray.size(); j++) {
 					bArray = relatedSets.get(aArray.get(j)).getElements();
-					if (auxArray.size() < Misc.intersection(aArray, bArray)
-							.size()) {
+					cArray = Misc.intersection(aArray, bArray);
+					if (auxArray.size() < cArray.size()) {
 						// Save a great intersection
-						auxArray = Misc.intersection(aArray, bArray);
+						auxArray = cArray;
 						// Time safe object to insert into reduced
 						c = aArray.get(j);
 					}
@@ -80,6 +87,7 @@ public class MOIGenerator implements Callable<ElementsGroup> {
 		// Update moi matrix with reduced array from i object
 		ElementsGroup temp = new ElementsGroup();
 		temp.setElements(aArray);
+		System.out.println("Generated MOI for related set " + index);
 		return temp;
 	}
 
