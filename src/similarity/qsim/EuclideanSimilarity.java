@@ -3,12 +3,17 @@ package similarity.qsim;
 import java.util.ArrayList;
 import java.util.List;
 
-
-//import models.qsim.Attribute;
 import models.qsim.DataRegister;
 import utils.qsim.Stats;
 
-public class EuclideanSimilarity implements Similarity{
+/**
+ * Euclidean distance 
+ * 
+ * @author Andrey Araujo Masiero
+ * @author Douglas De Rizzo Meneghetti
+ *
+ */
+public class EuclideanSimilarity implements Similarity {
 
 	/**
 	 * @param aux
@@ -42,7 +47,7 @@ public class EuclideanSimilarity implements Similarity{
 	 *            : List of values
 	 * @return similarityMatrix: Matrix of similarities between data
 	 */
-	public short[][] euclideanDistance(List<DataRegister> data) {
+	public short[][] getDistanceMatrix(List<DataRegister> data) {
 
 		float[][] matrix = new float[data.size()][data.size()];
 
@@ -59,5 +64,10 @@ public class EuclideanSimilarity implements Similarity{
 
 		// printSimilarity(matrix);
 		return Stats.dataNormalization(matrix);
+	}
+
+	@Override
+	public String toString() {
+		return "Euclidean";
 	}
 }

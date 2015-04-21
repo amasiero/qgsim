@@ -4,6 +4,13 @@ import java.util.List;
 
 import models.qsim.DataRegister;
 
+/**
+ * Represents a similarity measure. Create a class that implements this
+ * interface in order to make QSIM use your own similarity measures
+ * 
+ * @author Douglas De Rizzo Meneghetti
+ *
+ */
 public interface Similarity {
 
 	/**
@@ -21,6 +28,6 @@ public interface Similarity {
 	 *            : List of values
 	 * @return similarityMatrix: Matrix of similarities between data
 	 */
-	public short[][] euclideanDistance(List<DataRegister> data);
+	public short[][] getDistanceMatrix(List<DataRegister> data);
 
 }

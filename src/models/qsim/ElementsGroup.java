@@ -3,6 +3,12 @@ package models.qsim;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a group of elements
+ * 
+ * @author Andry Masiero
+ *
+ */
 public class ElementsGroup {
 
 	private List<Short> elements;

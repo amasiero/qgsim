@@ -3,6 +3,13 @@ package models.qsim;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents an attribute, or feature, used by clustering algorithms to group
+ * similar elements
+ * 
+ * @author Andrey Araujo Masiero
+ *
+ */
 public class Attribute {
 	protected String nameAttribute;
 	protected AttributeType type;
