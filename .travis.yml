@@ -6,4 +6,4 @@ jdk:
   - openjdk7
 
 script:
-  - ant clean build test
+  - ant clean build FastTests
