@@ -1,13 +1,2 @@
 QSIM.jar
-bin/algorithm/qsim/QSim.class
-bin/file/qsim/TxtFunctions.class
-bin/file/qsim/XMLFunctions.class
-bin/models/qsim/Attribute.class
-bin/models/qsim/AttributeType.class
-bin/models/qsim/DataRegister.class
-bin/models/qsim/ElementsGroup.class
-bin/models/qsim/Item.class
-bin/similarity/qsim/Similarity.class
-bin/utils/qsim/Misc.class
-bin/utils/qsim/Similarity.class
-bin/utils/qsim/Stats.class
+bin
