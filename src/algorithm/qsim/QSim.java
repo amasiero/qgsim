@@ -36,7 +36,16 @@ public class QSim implements Runnable {
 	private String dataFile;
 	private String groupsFile;
 	private Similarity similarity;
-	private boolean parallel;
+	private long executionTime;
+	private int threads;
+
+	public int getThreads() {
+		return threads;
+	}
+
+	public long getExecutionTime() {
+		return executionTime;
+	}
 
 	/**
 	 * Constructor of QSim class
@@ -71,11 +80,11 @@ public class QSim implements Runnable {
 	 *            full path and name to save the text file containing the final
 	 *            classification of the algorithm
 	 */
-	public QSim(float q, Similarity similarity, boolean parallel,
-			String configFile, String dataFile, String groupsFile) {
+	public QSim(float q, Similarity similarity, int threads, String configFile,
+			String dataFile, String groupsFile) {
 		super();
 		this.similarity = similarity;
-		this.parallel = parallel;
+		this.threads = threads < 1 ? 1 : threads;
 		this.q = (short) (q * 1000);
 		groups = new ArrayList<ElementsGroup>();
 		setData(configFile, dataFile);
@@ -186,7 +195,7 @@ public class QSim implements Runnable {
 					+ data.get(0).getRegister().size());
 			System.out.println("Similarity type: " + similarity.toString());
 			System.out.println("MOI calculation method: "
-					+ (parallel ? "Parallel" : "Serial"));
+					+ (threads == 1 ? "Parallel" : "Serial"));
 			System.out.print("Calculating similarity matrix... ");
 			long time2 = System.currentTimeMillis();
 			similarityMatrix = similarity.getDistanceMatrix(data);
@@ -200,7 +209,7 @@ public class QSim implements Runnable {
 			time2 = System.currentTimeMillis();
 			System.out.print("Calculating MOI... ");
 			List<ElementsGroup> moi;
-			if (parallel)
+			if (threads > 1)
 				moi = this.parallelMaximumObjectIntersection(rs);
 			else
 				moi = this.maximumObjectIntersection(rs);
@@ -216,8 +225,9 @@ public class QSim implements Runnable {
 			this.generateGroups(moi);
 			System.out.println("Done: " + (System.currentTimeMillis() - time2)
 					/ 1000.0 + " s");
-			System.out.println("Finished\nExecution time: "
-					+ (System.currentTimeMillis() - time) / 1000.0 + " s");
+			executionTime = System.currentTimeMillis() - time;
+			System.out.println("Finished\nExecution time: " + executionTime
+					/ 1000.0 + " s");
 		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -458,8 +468,10 @@ public class QSim implements Runnable {
 		 */
 		ArrayList<MOIGenerator> tasks = new ArrayList<MOIGenerator>();
 
-		// object that is going to control all threads
-		ExecutorService executor = Executors.newFixedThreadPool(100);
+		/* object that is going to control all threads. 
+		 * the number of threads is set in the constructor
+		 */
+		ExecutorService executor = Executors.newFixedThreadPool(threads);
 
 		// creates MOIGenerators and adds them to a list
 		for (short i = 0; i < rs.size(); i++) {

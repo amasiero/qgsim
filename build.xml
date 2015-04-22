@@ -57,19 +57,27 @@
             <classpath refid="QSIM-Algorithm.classpath"/>
         </junit>
     </target>
-    <target name="FastTests">
+    <target name="SmallDatabaseTests">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="tests.qsim.FastTests" todir="${junit.output.dir}"/>
+            <test name="tests.qsim.SmallDatabaseTests" todir="${junit.output.dir}"/>
             <classpath refid="QSIM-Algorithm.classpath"/>
         </junit>
     </target>
-    <target name="SlowTests">
+    <target name="LargeDatabaseTests">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="tests.qsim.SlowTests" todir="${junit.output.dir}"/>
+            <test name="tests.qsim.LargeDatabaseTests" todir="${junit.output.dir}"/>
+            <classpath refid="QSIM-Algorithm.classpath"/>
+        </junit>
+    </target>
+    <target name="MultipleThreadNumbersTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="tests.qsim.VariableThreadNumberTests" todir="${junit.output.dir}"/>
             <classpath refid="QSIM-Algorithm.classpath"/>
         </junit>
     </target>
