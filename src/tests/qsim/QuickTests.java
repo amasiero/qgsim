@@ -5,7 +5,7 @@ import org.junit.Test;
 import similarity.qsim.EuclideanSimilarity;
 import algorithm.qsim.QSim;
 
-public class SmallDatabaseTests {
+public class QuickTests {
 	@Test
 	public void SmallSerialTest() {
 		new QSim(0.8f, new EuclideanSimilarity(), 1,

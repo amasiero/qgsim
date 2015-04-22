@@ -5,6 +5,7 @@
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="QSIM-Algorithm">
     <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../usr/share/eclipse/"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.7"/>
@@ -18,6 +19,7 @@
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -49,35 +51,19 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="Tests">
+    <target name="QuickTests">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="tests.qsim.Tests" todir="${junit.output.dir}"/>
+            <test name="tests.qsim.QuickTests" todir="${junit.output.dir}"/>
             <classpath refid="QSIM-Algorithm.classpath"/>
         </junit>
     </target>
-    <target name="SmallDatabaseTests">
+    <target name="SlowTests">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="tests.qsim.SmallDatabaseTests" todir="${junit.output.dir}"/>
-            <classpath refid="QSIM-Algorithm.classpath"/>
-        </junit>
-    </target>
-    <target name="LargeDatabaseTests">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="tests.qsim.LargeDatabaseTests" todir="${junit.output.dir}"/>
-            <classpath refid="QSIM-Algorithm.classpath"/>
-        </junit>
-    </target>
-    <target name="MultipleThreadNumbersTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="tests.qsim.VariableThreadNumberTests" todir="${junit.output.dir}"/>
+            <test name="tests.qsim.SlowTests" todir="${junit.output.dir}"/>
             <classpath refid="QSIM-Algorithm.classpath"/>
         </junit>
     </target>

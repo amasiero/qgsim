@@ -6,4 +6,4 @@ jdk:
   - openjdk7
 
 script:
-  - ant build MultipleThreadNumbersTest
+  - ant build QuickTests
