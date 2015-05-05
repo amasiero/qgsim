@@ -25,7 +25,7 @@ import file.qsim.XMLFunctions;
  * @version 1.0 November, 26th 2012
  *
  */
-public class QSim implements Runnable {
+public class QSim {
 
 	private List<DataRegister> data;
 	private List<ElementsGroup> groups;
@@ -52,12 +52,27 @@ public class QSim implements Runnable {
 	 *
 	 * @param q
 	 *            q value
+	 * @param similarity
+	 *            object that defines the similarity measures to be used by the
+	 *            algorithm
+	 * @param configFile
+	 *            full path and name for the XML configuration file
+	 * @param dataFile
+	 *            full path and name for the text file containing the
+	 *            comma-separated data to be clustered
+	 * @param groupsFile
+	 *            full path and name to save the text file containing the final
+	 *            classification of the algorithm
 	 */
-	public QSim(float q) {
+	public QSim(float q, Similarity similarity, String configFile,
+			String dataFile, String groupsFile) {
 		super();
+		this.similarity = similarity;
 		this.q = (short) (q * 1000);
-		data = new ArrayList<DataRegister>();
 		groups = new ArrayList<ElementsGroup>();
+		setData(configFile, dataFile);
+		this.threads = Runtime.getRuntime().availableProcessors();
+		this.setGroupsFile(groupsFile);
 	}
 
 	/**
@@ -68,27 +83,15 @@ public class QSim implements Runnable {
 	 * @param similarity
 	 *            object that defines the similarity measures to be used by the
 	 *            algorithm
-	 * @param parallel
-	 *            whether the MOI should be calculated in separate threads or
-	 *            not
 	 * @param configFile
 	 *            full path and name for the XML configuration file
 	 * @param dataFile
 	 *            full path and name for the text file containing the
 	 *            comma-separated data to be clustered
-	 * @param configFile
-	 *            full path and name to save the text file containing the final
-	 *            classification of the algorithm
 	 */
-	public QSim(float q, Similarity similarity, int threads, String configFile,
-			String dataFile, String groupsFile) {
-		super();
-		this.similarity = similarity;
-		this.threads = threads < 1 ? 1 : threads;
-		this.q = (short) (q * 1000);
-		groups = new ArrayList<ElementsGroup>();
-		setData(configFile, dataFile);
-		this.setGroupsFile(groupsFile);
+	public QSim(float q, Similarity similarity, String configFile,
+			String dataFile) {
+		this(q, similarity, configFile, dataFile, "groups.txt");
 	}
 
 	/**
@@ -209,10 +212,14 @@ public class QSim implements Runnable {
 			time2 = System.currentTimeMillis();
 			System.out.print("Calculating MOI... ");
 			List<ElementsGroup> moi;
+
+			// if the JVM detects more than one thread, it executes this step of
+			// the process in parallel
 			if (threads > 1)
 				moi = this.parallelMaximumObjectIntersection(rs);
 			else
 				moi = this.maximumObjectIntersection(rs);
+
 			System.out.println("Done: " + (System.currentTimeMillis() - time2)
 					/ 1000.0 + " s");
 			time2 = System.currentTimeMillis();
@@ -228,6 +235,9 @@ public class QSim implements Runnable {
 			executionTime = System.currentTimeMillis() - time;
 			System.out.println("Finished\nExecution time: " + executionTime
 					/ 1000.0 + " s");
+
+			System.out.println("Saving groups file to " + groupsFile);
+			saveOutputGroups(groupsFile);
 		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -468,8 +478,9 @@ public class QSim implements Runnable {
 		 */
 		ArrayList<MOIGenerator> tasks = new ArrayList<MOIGenerator>();
 
-		/* object that is going to control all threads. 
-		 * the number of threads is set in the constructor
+		/*
+		 * object that is going to control all threads. the number of threads is
+		 * set in the constructor
 		 */
 		ExecutorService executor = Executors.newFixedThreadPool(threads);
 
@@ -638,8 +649,7 @@ public class QSim implements Runnable {
 			// Roam through all groups created
 			for (ElementsGroup g : groups) {
 				// Calculates centroid from group g
-				DataRegister centroidG = Stats.centroid(g.getElements(),
-						data);
+				DataRegister centroidG = Stats.centroid(g.getElements(), data);
 				// list is an aux array keep just the intersection between g and
 				// aux
 				List<Short> list = Misc.intersection(aux, g.getElements());
@@ -671,14 +681,6 @@ public class QSim implements Runnable {
 		ElementsGroup g = new ElementsGroup();
 		g.setElements(aux);
 		groups.add(g);
-
-	}
-
-	@Override
-	public void run() {
-		execute();
-		// saveGroupsFile(groupsFile);
-		saveOutputGroups(groupsFile);
 	}
 
 	/**
