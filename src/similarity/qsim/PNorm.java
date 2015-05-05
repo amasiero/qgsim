@@ -2,10 +2,8 @@ package similarity.qsim;
 
 import java.util.List;
 
-import com.sun.webkit.ThemeClient;
-
-import utils.qsim.Stats;
 import models.qsim.DataRegister;
+import utils.qsim.Stats;
 
 /**
  * Uses the p-norm as the similarity measure between data points.
@@ -17,9 +15,9 @@ import models.qsim.DataRegister;
  * the p-norm is equal to the Chebyshev distance; and for 1 < p < infinity, the
  * p-norm equals the behavior of the Minkowski distance.
  * 
- * Also, for p > 1, the p-norm satisfies the four basic conditions of a metric, that
- * is, non-negativity, identity of indiscernibles, symmetry and the triangke
- * inequality.
+ * Also, for p > 1, the p-norm satisfies the four basic conditions of a metric,
+ * that is, non-negativity, identity of indiscernibles, symmetry and the
+ * triangke inequality.
  * 
  * @author Douglas De Rizzo Meneghetti
  *
@@ -37,7 +35,9 @@ public class PNorm implements Similarity {
 
 	/**
 	 * P-norm constructor
-	 * @param p the p value for the norm
+	 * 
+	 * @param p
+	 *            the p value for the norm
 	 */
 	public PNorm(int p) {
 		this.p = p;
@@ -58,7 +58,6 @@ public class PNorm implements Similarity {
 				matrix[j][i] = matrix[i][j];
 			}
 
-		// printSimilarity(matrix);
 		return Stats.dataNormalization(matrix);
 	}
 

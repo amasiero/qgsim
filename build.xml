@@ -51,19 +51,19 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="QuickTests">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="tests.qsim.QuickTests" todir="${junit.output.dir}"/>
-            <classpath refid="QSIM-Algorithm.classpath"/>
-        </junit>
-    </target>
     <target name="SlowTests">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="tests.qsim.SlowTests" todir="${junit.output.dir}"/>
+            <classpath refid="QSIM-Algorithm.classpath"/>
+        </junit>
+    </target>
+    <target name="QuickTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="tests.qsim.QuickTests" todir="${junit.output.dir}"/>
             <classpath refid="QSIM-Algorithm.classpath"/>
         </junit>
     </target>
