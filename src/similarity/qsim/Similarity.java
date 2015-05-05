@@ -14,13 +14,6 @@ import models.qsim.DataRegister;
 public interface Similarity {
 
 	/**
-	 * @param aux
-	 * @param data
-	 * @return
-	 */
-	public DataRegister centroid(List<Short> aux, List<DataRegister> data);
-
-	/**
 	 *
 	 * Calculus of similarity based on Euclidean Distance
 	 *

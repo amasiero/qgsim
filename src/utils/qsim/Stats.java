@@ -1,6 +1,9 @@
 package utils.qsim;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import models.qsim.DataRegister;
 
 /**
  *
@@ -104,6 +107,30 @@ public class Stats {
 	
 		// Returns data normalized
 		return newData;
+	}
+
+
+	/**
+	 * @param groupIndexes
+	 * @param data
+	 * @return
+	 */
+	public static DataRegister centroid(List<Short> groupIndexes, List<DataRegister> data) {
+		// Initialize aux variables
+		DataRegister centroid = new DataRegister();
+		List<Float> register = new ArrayList<Float>();
+		for (int i = 0; i < data.get(0).getRegister().size(); i++) {
+			float temp = 0.0f;
+			for (int j : groupIndexes)
+				temp += data.get(j).getRegister().get(i);
+			temp /= groupIndexes.size();
+			register.add(temp);
+		}
+
+		centroid.setRegister(register);
+
+		// Returns centroid
+		return centroid;
 	}
 
 }

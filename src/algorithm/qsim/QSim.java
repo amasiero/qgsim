@@ -514,7 +514,7 @@ public class QSim implements Runnable {
 			// Calculates all existing groups centroid
 			List<DataRegister> lp = new ArrayList<DataRegister>();
 			for (ElementsGroup g : groups)
-				lp.add(similarity.centroid(g.getElements(), data));
+				lp.add(Stats.centroid(g.getElements(), data));
 
 			// Calculates the similarity between them
 			short[][] simTemp = similarity.getDistanceMatrix(lp);
@@ -570,7 +570,7 @@ public class QSim implements Runnable {
 				// Calculates all existing groups centroid
 				List<DataRegister> lp = new ArrayList<DataRegister>();
 				for (ElementsGroup g : groups)
-					lp.add(similarity.centroid(g.getElements(), data));
+					lp.add(Stats.centroid(g.getElements(), data));
 				// Add the element in comparison
 				lp.add(data.get(element));
 
@@ -634,11 +634,11 @@ public class QSim implements Runnable {
 		// Checks if exists some group
 		if (!groups.isEmpty()) {
 			// Calculates centroid of aux
-			DataRegister centroidAux = similarity.centroid(aux, data);
+			DataRegister centroidAux = Stats.centroid(aux, data);
 			// Roam through all groups created
 			for (ElementsGroup g : groups) {
 				// Calculates centroid from group g
-				DataRegister centroidG = similarity.centroid(g.getElements(),
+				DataRegister centroidG = Stats.centroid(g.getElements(),
 						data);
 				// list is an aux array keep just the intersection between g and
 				// aux
