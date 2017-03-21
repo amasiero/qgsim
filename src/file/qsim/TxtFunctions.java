@@ -14,6 +14,14 @@ import models.qsim.Item;
 
 public class TxtFunctions {
 
+	/**
+	 * Extracts attribute values from a text file
+	 * 
+	 * @param fileName
+	 *            The path to the file
+	 * @return A list containing attribute values for each element, used by the
+	 *         algorithm to group items
+	 */
 	public static List<DataRegister> readTxt(String fileName,
 			List<Attribute> attributes) {
 		try {
@@ -29,18 +37,14 @@ public class TxtFunctions {
 
 			while ((line = br.readLine()) != null) {
 				List<Float> register = new ArrayList<Float>();
-				for (int i = 0; i < line.split(",").length; i++) {
-					if ((attributes.get(i).getType() == AttributeType.DECIMAL)
-							|| (attributes.get(i).getType() == AttributeType.NUMBER)) {
+				for (int i = 0; i < line.split(",").length; i++)
+					if (attributes.get(i).getType() == AttributeType.DECIMAL
+							|| attributes.get(i).getType() == AttributeType.NUMBER)
 						register.add(Float.parseFloat(line.split(",")[i]));
-					} else {
-						for (Item item : attributes.get(i).getItens()) {
-							if (item.getNameItem().equals(line.split(",")[i])) {
+					else
+						for (Item item : attributes.get(i).getItens())
+							if (item.getNameItem().equals(line.split(",")[i]))
 								register.add((float) item.getCodeItem());
-							}
-						}
-					}
-				}
 				DataRegister dr = new DataRegister();
 				dr.setRegister(register);
 				data.add(dr);

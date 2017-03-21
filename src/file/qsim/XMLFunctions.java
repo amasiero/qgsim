@@ -1,20 +1,31 @@
 package file.qsim;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import models.qsim.Attribute;
 import models.qsim.AttributeType;
 import models.qsim.Item;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 public class XMLFunctions {
 
+	/**
+	 * Extracts attribute types from an XML configuration file
+	 * 
+	 * @param fileName
+	 *            The path to the file
+	 * @return A list containing attribute information used by the algorithm to
+	 *         group items
+	 */
 	public static List<Attribute> readXML(String fileName) {
 		try {
 			List<Attribute> attributes = new ArrayList<Attribute>();
@@ -39,7 +50,7 @@ public class XMLFunctions {
 
 					temp.setNameAttribute(eElement.getElementsByTagName("name")
 							.item(0).getTextContent());
-					
+
 					switch (eElement.getElementsByTagName("type").item(0)
 							.getTextContent().toLowerCase()) {
 					case "number":

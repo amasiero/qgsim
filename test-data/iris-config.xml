@@ -1,0 +1,21 @@
+<?xml version="1.0" ?> 
+<info>
+	<attributes>
+		<attribute>
+			<name>Sepal-Length</name>
+			<type>Decimal</type>
+		</attribute>
+		<attribute>
+			<name>Sepal-Width</name>
+			<type>Decimal</type>
+		</attribute>
+		<attribute>
+			<name>Petal-Length</name>
+			<type>Decimal</type>
+		</attribute>
+		<attribute>
+			<name>Petal-Width</name>
+			<type>Decimal</type>
+		</attribute>
+	</attributes>
+</info>

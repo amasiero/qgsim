@@ -3,7 +3,7 @@ package models.qsim;
 import java.util.List;
 
 public class DataRegister {
-	
+
 	protected List<Float> register;
 
 	/**
@@ -14,11 +14,11 @@ public class DataRegister {
 	}
 
 	/**
-	 * @param register the register to set
+	 * @param register
+	 *            the register to set
 	 */
 	public void setRegister(List<Float> register) {
 		this.register = register;
 	}
-	
-	
+
 }

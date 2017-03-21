@@ -3,42 +3,21 @@ package models.qsim;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents an attribute, or feature, used by clustering algorithms to group
+ * similar elements
+ * 
+ * @author Andrey Araujo Masiero
+ *
+ */
 public class Attribute {
 	protected String nameAttribute;
 	protected AttributeType type;
 	protected List<Item> itens;
-	
-	public Attribute(){
+
+	public Attribute() {
 		super();
-		this.itens = new ArrayList<Item>();
-	}
-
-	/**
-	 * @return the nameAttribute
-	 */
-	public String getNameAttribute() {
-		return nameAttribute;
-	}
-
-	/**
-	 * @param nameAttribute the nameAttribute to set
-	 */
-	public void setNameAttribute(String nameAttribute) {
-		this.nameAttribute = nameAttribute;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public AttributeType getType() {
-		return type;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(AttributeType type) {
-		this.type = type;
+		itens = new ArrayList<Item>();
 	}
 
 	/**
@@ -49,10 +28,41 @@ public class Attribute {
 	}
 
 	/**
-	 * @param itens the itens to set
+	 * @return the nameAttribute
+	 */
+	public String getNameAttribute() {
+		return nameAttribute;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public AttributeType getType() {
+		return type;
+	}
+
+	/**
+	 * @param itens
+	 *            the itens to set
 	 */
 	public void setItens(List<Item> itens) {
 		this.itens = itens;
 	}
-	
+
+	/**
+	 * @param nameAttribute
+	 *            the nameAttribute to set
+	 */
+	public void setNameAttribute(String nameAttribute) {
+		this.nameAttribute = nameAttribute;
+	}
+
+	/**
+	 * @param type
+	 *            the type to set
+	 */
+	public void setType(AttributeType type) {
+		this.type = type;
+	}
+
 }

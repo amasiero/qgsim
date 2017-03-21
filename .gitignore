@@ -1,2 +1,5 @@
 QSIM.jar
 bin
+*.class
+/bin/
+junit
